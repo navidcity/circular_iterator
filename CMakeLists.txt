@@ -5,7 +5,7 @@ project(circular_iterator
     LANGUAGES CXX
     VERSION 0.0.1
     DESCRIPTION "C++ circular iterator compliant with STL containers using Boost iterator"
-    HOMEPAGE_URL "https://github.com/navidcity/circular_iterator.git")
+    HOMEPAGE_URL "https://github.com/navidcity/${PROJECT_NAME}.git")
 
 # ---- Include guards ----
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
@@ -14,44 +14,66 @@ endif()
 
 find_package(Boost 1.65.1 REQUIRED)
 
+add_library(${PROJECT_NAME} INTERFACE)
+# add alias so the project can be used with add_subdirectory
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+
 include(GNUInstallDirs)
 
-add_library(circular_iterator INTERFACE)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    set(IS_TOPLEVEL_PROJECT TRUE)
+else()
+    set(IS_TOPLEVEL_PROJECT FALSE)
+endif()
+
+option(${PROJECT_NAME}_INSTALL_LIBRARY
+    "Enable installing of ${PROJECT_NAME} library into default locations"
+    ${IS_TOPLEVEL_PROJECT})
+option(${PROJECT_NAME}_BUILD_TESTING "Build and run ${PROJECT_NAME} tests " ${IS_TOPLEVEL_PROJECT})
 
 target_include_directories(
-    circular_iterator INTERFACE
+    ${PROJECT_NAME} INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-target_compile_features(circular_iterator INTERFACE cxx_std_14)
+target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_14)
 
-install(TARGETS circular_iterator
-    EXPORT ${PROJECT_NAME}_Targets
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+if(BUILD_TESTING AND ${PROJECT_NAME}_BUILD_TESTING)
+    add_subdirectory(test)
+endif()
 
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file("CircularIteratorConfigVersion.cmake"
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY SameMajorVersion)
-configure_package_config_file(
-    "${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
-    "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-    INSTALL_DESTINATION
-    ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
 
-install(EXPORT ${PROJECT_NAME}_Targets
-    FILE ${PROJECT_NAME}Targets.cmake
-    NAMESPACE ${PROJECT_NAME}::
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+if(SI_INSTALL_LIBRARY)
+    # locations are provided by GNUInstallDirs
+    install(TARGETS ${PROJECT_NAME}
+        EXPORT ${PROJECT_NAME}_Targets
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-install(FILES
-    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file("${PROJECT_NAME}ConfigVersion.cmake"
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY SameMajorVersion)
+    configure_package_config_file(
+        "${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+        "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+        INSTALL_DESTINATION
+        ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
 
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION include)
+    install(EXPORT ${PROJECT_NAME}_Targets
+        FILE ${PROJECT_NAME}Targets.cmake
+        NAMESPACE ${PROJECT_NAME}::
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+
+    install(FILES
+        "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+        "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+endif()
 
 set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Navid Jalali")
