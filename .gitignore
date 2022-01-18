@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# Build directory
+build
+
+# Autosaves
+*./swp
+*.autosave
+
+# QT
+CMakeLists.txt.user
