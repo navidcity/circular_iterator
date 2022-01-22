@@ -6,9 +6,9 @@
 #include <boost/iterator.hpp>
 
 template<class Iterator>
-class cycle_iterator
+class circular_iterator
         : public boost::iterator_adaptor<
-        cycle_iterator<Iterator>,     // the derived class overriding iterator behavior
+        circular_iterator<Iterator>,     // the derived class overriding iterator behavior
         Iterator,       // the base class providing default behavior
         boost::use_default, // iterator value type, will be IteratorBase::value_type
         std::bidirectional_iterator_tag, // iterator category
@@ -16,14 +16,14 @@ class cycle_iterator
         >
 {
 private:
-    using typename boost::iterator_adaptor<cycle_iterator<Iterator>, Iterator, boost::use_default, std::forward_iterator_tag, boost::use_default>::iterator_adaptor_;
+    using typename boost::iterator_adaptor<circular_iterator<Iterator>, Iterator, boost::use_default, std::forward_iterator_tag, boost::use_default>::iterator_adaptor_;
     using iterator_adaptor_::base_reference;
 
     Iterator m_itBegin;
     Iterator m_itEnd;
 
 public:
-    cycle_iterator( Iterator itBegin, Iterator itEnd )
+    circular_iterator( Iterator itBegin, Iterator itEnd )
         : iterator_adaptor_(itBegin),
           m_itBegin(itBegin),
           m_itEnd(itEnd)
