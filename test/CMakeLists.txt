@@ -25,3 +25,16 @@ target_link_libraries(circular_iterator_test_decrement
 add_test(NAME decrement
     COMMAND circular_iterator_test_decrement
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_executable(circular_iterator_test_empty)
+
+target_sources(circular_iterator_test_empty PRIVATE
+    circular_iterator_test_empty.cpp)
+
+target_link_libraries(circular_iterator_test_empty
+    PRIVATE
+    circular_iterator::circular_iterator)
+
+add_test(NAME empty_container
+    COMMAND circular_iterator_test_empty
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
