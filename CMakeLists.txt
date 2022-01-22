@@ -18,6 +18,8 @@ add_library(${PROJECT_NAME} INTERFACE)
 # add alias so the project can be used with add_subdirectory
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
+target_include_directories(${PROJECT_NAME} INTERFACE ${Boost_INCLUDE_DIRS})
+
 include(GNUInstallDirs)
 include(CTest)
 
