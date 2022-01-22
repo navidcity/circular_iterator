@@ -34,7 +34,7 @@ option(${PROJECT_NAME}_BUILD_TESTING "Build and run ${PROJECT_NAME} tests " ${IS
 
 target_include_directories(
     ${PROJECT_NAME} INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_14)
@@ -43,8 +43,11 @@ if(BUILD_TESTING AND ${PROJECT_NAME}_BUILD_TESTING)
     add_subdirectory(test)
 endif()
 
+#####################################
+# Install Files
+#####################################
 
-if(CIRCULAR_ITERATOR_INSTALL_LIBRARY)
+if(${PROJECT_NAME}_INSTALL_LIBRARY)
     # locations are provided by GNUInstallDirs
     install(TARGETS ${PROJECT_NAME}
         EXPORT ${PROJECT_NAME}_Targets
@@ -60,23 +63,38 @@ if(CIRCULAR_ITERATOR_INSTALL_LIBRARY)
         "${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
         "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
         INSTALL_DESTINATION
-        ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+        ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
     install(EXPORT ${PROJECT_NAME}_Targets
         FILE ${PROJECT_NAME}Targets.cmake
         NAMESPACE ${PROJECT_NAME}::
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
     install(FILES
         "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
         "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 endif()
 
 set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Navid Jalali")
+set(CPACK_PACKAGE_HOMEPAGE_URL "${PROJECT_HOMEPAGE_URL}")
 
 include(CPack)
+
+
+#####################################
+# Uninstall Files
+#####################################
+if(NOT TARGET uninstall)
+  configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+  add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif()
