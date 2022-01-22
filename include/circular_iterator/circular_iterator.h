@@ -1,7 +1,7 @@
 #ifndef CIRCULAR_ITERATOR_H
 #define CIRCULAR_ITERATOR_H
 
-#include <assert.h>
+#include <stdexcept>
 #include <boost/iterator_adaptors.hpp>
 
 template<class Iterator>
@@ -27,7 +27,7 @@ public:
           m_itBegin(itBegin),
           m_itEnd(itEnd)
     {
-        assert (m_itBegin != m_itEnd);
+        if(m_itBegin == m_itEnd)    throw std::invalid_argument("circular_iterator<Iterator>::circular_iterator(Iterator, Iterator) [with Iterator = __gnu_cxx::__normal_iterator<const int*, std::vector<int> >]: Assertion `m_itBegin != m_itEnd` failed.");
     }
 
     auto increment()
