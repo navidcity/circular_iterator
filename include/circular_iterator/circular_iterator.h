@@ -3,7 +3,6 @@
 
 #include <assert.h>
 #include <boost/iterator_adaptors.hpp>
-#include <boost/iterator.hpp>
 
 template<class Iterator>
 class circular_iterator
@@ -16,7 +15,7 @@ class circular_iterator
         >
 {
 private:
-    using typename boost::iterator_adaptor<circular_iterator<Iterator>, Iterator, boost::use_default, std::forward_iterator_tag, boost::use_default>::iterator_adaptor_;
+    using typename boost::iterator_adaptor<circular_iterator<Iterator>, Iterator, boost::use_default, std::bidirectional_iterator_tag, boost::use_default>::iterator_adaptor_;
     using iterator_adaptor_::base_reference;
 
     Iterator m_itBegin;
@@ -28,7 +27,7 @@ public:
           m_itBegin(itBegin),
           m_itEnd(itEnd)
     {
-	assert (m_itBegin != m_itEnd); //this can be disable using NDEBUG
+        assert (m_itBegin != m_itEnd);
     }
 
     auto increment()
