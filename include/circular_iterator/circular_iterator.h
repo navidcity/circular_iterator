@@ -1,6 +1,7 @@
 #ifndef CIRCULAR_ITERATOR_H
 #define CIRCULAR_ITERATOR_H
 
+#include <assert.h>
 #include <boost/iterator_adaptors.hpp>
 #include <boost/iterator.hpp>
 
@@ -26,7 +27,9 @@ public:
         : iterator_adaptor_(itBegin),
           m_itBegin(itBegin),
           m_itEnd(itEnd)
-    {}
+    {
+	assert (m_itBegin != m_itEnd); //this can be disable using NDEBUG
+    }
 
     auto increment()
     {
