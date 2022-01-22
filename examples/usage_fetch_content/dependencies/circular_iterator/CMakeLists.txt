@@ -1,0 +1,1 @@
+FetchContent_MakeAvailable(circular_iterator)
