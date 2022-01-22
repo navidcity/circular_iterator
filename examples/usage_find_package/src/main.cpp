@@ -11,9 +11,7 @@ auto main()->int
 
     while(true)
     {
-        std::cout << *c_iter << std::endl;
-
-        c_iter.increment();
+        std::cout << *c_iter++ << std::endl;
 
         sleep(1);
     }
