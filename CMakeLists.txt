@@ -44,6 +44,8 @@ if(BUILD_TESTING AND ${PROJECT_NAME}_BUILD_TESTING)
     add_subdirectory(test)
 endif()
 
+enable_testing()
+
 #####################################
 # Install Files
 #####################################
