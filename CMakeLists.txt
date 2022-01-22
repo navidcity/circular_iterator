@@ -12,12 +12,11 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there.")
 endif()
 
-find_package(Boost 1.65.1 REQUIRED)
-
 add_library(${PROJECT_NAME} INTERFACE)
 # add alias so the project can be used with add_subdirectory
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
+find_package(Boost 1.65.1 REQUIRED)
 target_include_directories(${PROJECT_NAME} INTERFACE ${Boost_INCLUDE_DIRS})
 
 include(GNUInstallDirs)
@@ -37,7 +36,7 @@ option(${PROJECT_NAME}_BUILD_TESTING "Build and run ${PROJECT_NAME} tests " ${IS
 target_include_directories(
     ${PROJECT_NAME} INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>)
 
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_14)
 
