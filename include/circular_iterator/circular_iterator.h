@@ -43,12 +43,12 @@ public:
 
     auto decrement()
     {
-        /* Increment the base reference pointer. */
-        --base_reference();
-
-        /* Check if past-the-end element is reached and bring back the base reference to the beginning. */
+        /* Check if past-the-begining element is reached and bring back the base reference to the end. */
         if(base_reference() == m_itBegin)
             base_reference() = m_itEnd;
+
+        /* Decrement the base reference pointer. */
+        --base_reference();
     }
 };
 
