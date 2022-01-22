@@ -10,7 +10,7 @@ class cycle_iterator
         cycle_iterator<Iterator>,     // the derived class overriding iterator behavior
         Iterator,       // the base class providing default behavior
         boost::use_default, // iterator value type, will be IteratorBase::value_type
-        std::forward_iterator_tag, // iterator category
+        std::bidirectional_iterator_tag, // iterator category
         boost::use_default  // iterator reference type
         >
 {
