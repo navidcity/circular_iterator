@@ -1,8 +1,21 @@
-#include <cstdlib>
-#include <circular_iterator.h>
+#include <vector>
+#include <iostream>
+#include <unistd.h>
+#include <circular_iterator/circular_iterator.h>
 
 auto main()->int
 {
+    std::vector<int> vec { 1, 2, 3, 4};
 
-   return EXIT_SUCCESS;
+    auto c_iter = cycle_iterator<decltype (vec.begin())>(vec.begin(), vec.end());
+
+    while(true)
+    {
+        std::cout << *c_iter << std::endl;
+
+        c_iter.increment();
+
+        sleep(1);
+    }
+    return EXIT_SUCCESS;
 }
