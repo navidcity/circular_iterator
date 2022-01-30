@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 # Define the project name, language, version, description and homepage URL
 project(circular_iterator
     LANGUAGES CXX
-    VERSION 0.1.0
+    VERSION 0.2.0
     DESCRIPTION "C++ circular iterator compliant with STL containers using Boost iterator"
     HOMEPAGE_URL "https://github.com/navidcity/${PROJECT_NAME}.git")
 
