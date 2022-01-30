@@ -4,25 +4,25 @@
 #include <stdexcept>
 #include <boost/iterator_adaptors.hpp>
 
-template<class Iterator>
+template<class iterator>
 class circular_iterator
         : public boost::iterator_adaptor<
-        circular_iterator<Iterator>,     // the derived class overriding iterator behavior
-        Iterator,       // the base class providing default behavior
+        circular_iterator<iterator>,     // the derived class overriding iterator behavior
+        iterator,       // the base class providing default behavior
         boost::use_default, // iterator value type, will be IteratorBase::value_type
         std::bidirectional_iterator_tag, // iterator category
         boost::use_default  // iterator reference type
         >
 {
 private:
-    using typename boost::iterator_adaptor<circular_iterator<Iterator>, Iterator, boost::use_default, std::bidirectional_iterator_tag, boost::use_default>::iterator_adaptor_;
+    using typename boost::iterator_adaptor<circular_iterator<iterator>, iterator, boost::use_default, std::bidirectional_iterator_tag, boost::use_default>::iterator_adaptor_;
     using iterator_adaptor_::base_reference;
 
-    Iterator m_itBegin;
-    Iterator m_itEnd;
+    iterator m_itBegin;
+    iterator m_itEnd;
 
 public:
-    circular_iterator( Iterator itBegin, Iterator itEnd )
+    circular_iterator( iterator itBegin, iterator itEnd )
         : iterator_adaptor_(itBegin),
           m_itBegin(itBegin),
           m_itEnd(itEnd)
