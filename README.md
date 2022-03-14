@@ -20,7 +20,7 @@ auto main()->int
 }
 ```
 ## Exception handling:
-In the constructor it is checked that if the container is emtpy and if so it will throw and exception of type `std::invalid_argument`
+In the constructor it is checked that if the container is emtpy and if so it will throw an exception of type `std::invalid_argument`
 >**Caveat: Using cyclic iterators has its drawbacks. It is never checked that the container is empty or not after the object has been constructed. It is expected that the container never going to be empty after that circular_iterator is constructed from it.**
 
 >Note #1: Actualy that is why the standard library does not provide such iterators (see Caveat).
